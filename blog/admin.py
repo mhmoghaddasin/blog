@@ -15,7 +15,7 @@ class ChildrenItemInline(admin.TabularInline):
     show_change_link = True
 
 
-class CategoryAdmin (admin.ModelAdmin):
+class CategoryAdmin(admin.ModelAdmin):
     list_display = ('slug', 'title', 'parent')
     search_fields = ('slug', 'title')
     list_filter = ('parent',)
@@ -35,10 +35,12 @@ class PostAdmin(admin.ModelAdmin):
     search_fields = ('title',)
     list_filter = ('draft', 'category', 'author')
     date_hierarchy = 'publish_time'
-    inlines = (PostSettingInline, )
+    list_editable = ('draft',)
+    inlines = (PostSettingInline,)
 
     def make_published(self, request, queryset):
         queryset.update(draft=False)
+
     make_published.short_description = "Exit selected post from draft"
 
     # def allow_discoution(self, request, queryset):
@@ -50,7 +52,7 @@ class PostAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('post', 'is_confirmed',  'author',
+    list_display = ('post', 'is_confirmed', 'author',
                     'like_count', 'dislike_count')
     search_fields = ('content',)
     list_filter = ('is_confirmed',)

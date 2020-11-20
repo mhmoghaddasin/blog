@@ -48,7 +48,7 @@ class PostSetting(models.Model):
         on_delete=models.CASCADE)
     comment = models.BooleanField(_("comment"))
     author = models.BooleanField(_("author"))
-    allow_discusstion = models.BooleanField(_("allow discusstion"))
+    allow_discussion = models.BooleanField(_("allow discussion"))
 
     class Meta:
         verbose_name = _("PostSetting")
