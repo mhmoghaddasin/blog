@@ -5,8 +5,6 @@ from django.urls import reverse
 from .models import Post, Category
 
 
-# Create your views here.
-
 def home(request):
     posts = Post.objects.all()
     links = ''.join(
