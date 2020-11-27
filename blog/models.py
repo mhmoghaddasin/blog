@@ -27,7 +27,7 @@ class Post(models.Model):
     publish_time = models.DateTimeField(_("Publish at"), db_index=True)
     draft = models.BooleanField(_("Draft"), default=True, db_index=True)
     image = models.ImageField(_("image"), upload_to='post/images')
-    category = models.ForeignKey(Category, verbose_name=_(
+    category = models.ForeignKey(Category, related_name='posts', verbose_name=_(
         "Category"), on_delete=models.SET_NULL, null=True, blank=True)
     author = models.ForeignKey(User, verbose_name=_("Author"),
                                related_name='posts', related_query_name='children',
@@ -59,7 +59,7 @@ class CommentLike(models.Model):
     author = models.ForeignKey(User, verbose_name=_(
         "Author"), on_delete=models.CASCADE)
     comment = models.ForeignKey('blog.Comment', verbose_name=_(
-        'Comment'),  related_name='comment_like', related_query_name='comment_like', on_delete=models.CASCADE)
+        'Comment'), related_name='comment_like', related_query_name='comment_like', on_delete=models.CASCADE)
     condition = models.BooleanField(_("Condition"))
     create_at = models.DateTimeField(_("Create at"), auto_now_add=True)
     update_at = models.DateTimeField(_("Update at"), auto_now=True)
@@ -75,7 +75,7 @@ class CommentLike(models.Model):
 
 class Comment(models.Model):
     content = models.TextField(_("Content"))
-    post = models.ForeignKey(Post, verbose_name=_(
+    post = models.ForeignKey(Post, related_name='comments', related_query_name='comments', verbose_name=_(
         "Post"), on_delete=models.CASCADE)
     create_at = models.DateTimeField(_("Create at"), auto_now_add=True)
     update_at = models.DateTimeField(_("Update at"), auto_now=True)

@@ -1,34 +1,38 @@
 from django.http import HttpResponse, Http404
 from django.shortcuts import render
 from django.urls import reverse
-
 from .models import Post, Category
 
 
 def home(request):
+    author = request.GET.get('author', None)
+    category = request.GET.get('category', None)
     posts = Post.objects.all()
-    links = ''.join(
-        '<li><a href={}>{}</a></li>'.format(reverse('post_single', kwargs={'pk': post.slug}), post.title) for post in
-        posts)
-    blog = '<html><head><title>post archive</title></head><ul>{}</ul></body></html>'.format(links)
-    return HttpResponse(blog)
+    if author:
+        posts = posts.filter(author__username=author)
+    if category:
+        posts = posts.filter(category__slug=category)
+    categories = Category.objects.all()
+    context = {
+        "posts": posts,
+        "categories": categories,
+    }
+    return render(request, 'blog/posts.html', context)
 
 
 def single(request, pk):
     try:
-        post = Post.objects.get(slug=pk)
+        post = Post.objects.select_related('post_setting', 'category', 'author').get(slug=pk)
     except Post.DoesNotExist:
         raise Http404('post not found')
-    link = reverse('posts_archive')
-    post_details = '<h1>{}</h1>'.format(post.title)
-    post_details += '<h5><a href={}>{}</a></h5>'.format(reverse('category_single', args=[post.category.slug]),
-                                                        post.category.title)
-
-    post_details += '<p>{}</p>'.format(post.content)
-    blog = '<html><head><title>ali komijani</title></head>' \
-           '<body>{}<a href="{}">posts</a></body></html>'.format(
-        post_details, link)
-    return HttpResponse(blog)
+    context = {
+        "post": post,
+        'settings': post.post_setting,
+        'category': post.category,
+        'author': post.author,
+        'comments': post.comments.filter(is_confirmed=True)
+    }
+    return render(request, 'blog/post_single.html', context)
 
 
 def category_single(request, pk):
