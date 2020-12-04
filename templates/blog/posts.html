@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>posts archive</title>
-</head>
-<body>
+{% extends 'base/base.html' %}
+{% load static %}
+{% block body %}
 <ul>
     {% for post in posts %}
         <li>
@@ -19,5 +15,4 @@
         </li>
     {% endfor %}
 </ul>
-</body>
-</html>
+{% endblock %}
