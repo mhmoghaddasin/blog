@@ -23,8 +23,10 @@
                 </p>
                 {% if settings.allow_discussion %}
                     {% if settings.comment %}
-                        <form>
-                            <input name="content" type="text">
+                        <form action="{% url 'post_single' pk=post.slug %}" method="post">
+                            {% csrf_token %}
+                            {% include 'component/form.html' %}
+                            <input type="submit" value="ok">
                         </form>
                     {% endif %}
                     <div>

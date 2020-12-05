@@ -3,7 +3,7 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from .models import Post, Category
-from .forms import UserRegistrationForm
+from .forms import UserRegistrationForm, CommentForm
 from django.contrib.auth import authenticate, login, logout
 
 
@@ -23,18 +23,29 @@ def home(request):
     return render(request, 'blog/posts.html', context)
 
 
-def single(request, pk):
+def post_single(request, pk):
     try:
         post = Post.objects.select_related('post_setting', 'category', 'author').get(slug=pk)
     except Post.DoesNotExist:
         raise Http404('post not found')
     context = {
+        'form': CommentForm(),
         "post": post,
         'settings': post.post_setting,
         'category': post.category,
         'author': post.author,
         'comments': post.comments.filter(is_confirmed=True)
     }
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.post = post
+            comment.save()
+        else:
+            context['form'] = form
+
     return render(request, 'blog/post_single.html', context)
 
 
