@@ -1,7 +1,9 @@
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
+from django.contrib.auth import get_user_model
+User = get_user_model()
 import re
 
 
