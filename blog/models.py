@@ -3,6 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
 
+
 class Category(models.Model):
     title = models.CharField(_("Title"), max_length=50)
     slug = models.SlugField(_("Slug"), unique=True, db_index=True)
