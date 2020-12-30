@@ -1,6 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
-
+from django.utils.translation import ugettext_lazy as _
 from account.validators import validate_username, validate_password
 
 
@@ -8,10 +8,10 @@ class UserRegistrationForm(forms.Form):
     username = forms.CharField(label=_('نام کاربری'), max_length=150, required=True,
                                widget=forms.TextInput(attrs={"class": "form-control", }))
     email = forms.EmailField(label=_('ایمیل'), required=True, widget=forms.EmailInput(attrs={"class": "form-control"}),
-                             help_text=_('یه ایمیل معتبر وارد کنید جان مادرتون'))
+                             help_text=_('لطفا یک ایمیل معتبر وارد کنید'))
     password = forms.CharField(label=_('کلمه عبور'), widget=forms.PasswordInput(attrs={"class": "form-control"}),
                                required=True)
-    password2 = forms.CharField(label=_('بازم کلمه عبور'), widget=forms.PasswordInput(attrs={"class": "form-control"}),
+    password2 = forms.CharField(label=_('تکرار کلمه عبور'), widget=forms.PasswordInput(attrs={"class": "form-control"}),
                                 required=True)
     first_name = forms.CharField(label=_('نام'), widget=forms.TextInput(attrs={"class": "form-control"}))
     last_name = forms.CharField(label=_('نام خانوادگی'), widget=forms.TextInput(attrs={"class": "form-control"}))

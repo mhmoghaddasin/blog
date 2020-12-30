@@ -1,10 +1,10 @@
-from django.conf import settings
+# from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
-import re
+# import re
 
 
 def validate_password(password):
